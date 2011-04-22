@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Garoozis", "Garoozis\Garoozis.fsproj", "{D2A2E987-7EB3-4522-8F10-F4F5878684FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_layouts", "_layouts", "{14BCA5D3-DAAC-4D1D-BA47-A39EE9BEC5AC}"
+	ProjectSection(SolutionItems) = preProject
+		sample\_layouts\post.cshtml = sample\_layouts\post.cshtml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_posts", "_posts", "{0CA50B40-8632-4D14-B0C9-C56733600551}"
+	ProjectSection(SolutionItems) = preProject
+		sample\_posts\2011-4-21-first-post.html = sample\_posts\2011-4-21-first-post.html
+		sample\_posts\2011-4-21-second.md = sample\_posts\2011-4-21-second.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2A2E987-7EB3-4522-8F10-F4F5878684FC}.Debug|x86.ActiveCfg = Debug|x86
+		{D2A2E987-7EB3-4522-8F10-F4F5878684FC}.Debug|x86.Build.0 = Debug|x86
+		{D2A2E987-7EB3-4522-8F10-F4F5878684FC}.Release|x86.ActiveCfg = Release|x86
+		{D2A2E987-7EB3-4522-8F10-F4F5878684FC}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
