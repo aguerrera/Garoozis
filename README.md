@@ -11,6 +11,7 @@ This is kind of like [Jekyll](https://github.com/mojombo/jekyll), but more for .
 ** THIS IS VERY EARLY STAGE. USE JEKYLL IF YOU NEED SOMETHING LIKE IT **
 
 Some Notes:
+-----------
 * like in Jekyll, some info is placed at the top of your text files. it's Json in this case, because using Yaml in .NET is beyond my skills
 * project is organized in Modules.  I'd like to make it more .NET friendly
 

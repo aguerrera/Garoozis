@@ -7,8 +7,13 @@
 #load "Utils.fs"
 
 open System
+open System.Collections.Generic
 open System.IO
 open System.Security.Cryptography
 open System.Text
+open System.Text.RegularExpressions
 open RazorEngine
 open Newtonsoft.Json
+
+let source_dir = @"\Garoozis\sample"
+let output_dir = @"C:\Staging\www\"
