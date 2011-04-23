@@ -38,9 +38,14 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <ItemGroup>
     <None Include="Script1.fsx" />
+    <Compile Include="Models.fs" />
     <Compile Include="Utils.fs" />
+    <Compile Include="Transformer.fs" />
     <Compile Include="Program.fs" />
     <None Include="packages.config" />
+    <Content Include="app.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="EcmaScript.NET.modified">

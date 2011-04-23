@@ -1,5 +1,5 @@
 ﻿
-module Utils
+module Garoozis.Utils
 
     open System.IO
     open System.Text
@@ -42,3 +42,17 @@ module Utils
         let dirs = get_dirs path |> Seq.sort |> Seq.toList |> List.rev
         dirs |> List.iter (fun d -> Directory.Delete(d))
         ()
+
+    let rec copy_directory source dest = 
+        let newdest = Path.Combine(dest, Path.GetFileName(source))
+        if Directory.Exists(newdest) = false then Directory.CreateDirectory(newdest) |> ignore
+        printfn "copying dir: %s TO %s" source newdest
+        Directory.GetFiles(source) 
+        |> Seq.iter (fun f -> 
+                        printfn "   File %s" f
+                        File.Copy(f, Path.Combine(newdest, Path.GetFileName(f)), true ) 
+                      )
+        for subdir in Directory.GetDirectories(source) do
+            copy_directory subdir newdest
+
+
