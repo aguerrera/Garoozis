@@ -41,6 +41,7 @@
     <Compile Include="Models.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Transformer.fs" />
+    <Compile Include="RemoteStorage.fs" />
     <Compile Include="Program.fs" />
     <None Include="packages.config" />
     <Content Include="app.js">

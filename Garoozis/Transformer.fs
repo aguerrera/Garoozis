@@ -71,7 +71,7 @@ let get_page filename =
         let fi = new FileInfo(filename)
         page.Created <- fi.CreationTime
     match Path.GetExtension(filename) with
-    | ".md" -> page.Content <- Utils.md_to_html(contents)
+    | ".md" -> page.Content <- Garoozis.Utils.md_to_html(contents)
     | _ -> page.Content <- contents
     page
 
@@ -94,7 +94,7 @@ let build_pages output_dir source_dir =
         Directory.CreateDirectory(output_dir) |> ignore
 
     // clean up anything in the output director
-    Utils.delete_files_and_directories(output_dir)
+    Garoozis.Utils.delete_files_and_directories(output_dir)
 
 
     // the .cshtml Razor templates are the'Layouts', in the vernacular
@@ -121,7 +121,7 @@ let build_pages output_dir source_dir =
         |> Seq.filter (fun d -> d.Name.StartsWith("_") = false )
         |> Seq.iter (fun d ->
                             printfn "copying dir: %s" d.Name
-                            Utils.copy_directory d.FullName output_dir
+                            Garoozis.Utils.copy_directory d.FullName output_dir
                             )
                                 
     files_to_transorm 

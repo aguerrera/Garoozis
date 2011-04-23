@@ -15,6 +15,8 @@ Some Notes:
 * like in Jekyll, some info is placed at the top of your text files. it's Json in this case, because using Yaml in .NET is beyond my skills
 * project is organized in Modules.  I'd like to make it more .NET friendly
 
+
+
 Here is what this is going to do:
 --------------------------------
 * can source directory for html or markdown, transform with razor.  Top level search only, and special folders _posts, _layouts
@@ -23,3 +25,8 @@ Here is what this is going to do:
 * copy other folders such as \static or \images to staging folder
 * run YUI compressor on all files in \www staging folder
 * push changeset up to Windows Azure
+
+Items to Do:
+------------
+* Create intelligent models - Next/Previous, Table of Contents, etc
+* Push to Azure or S3
