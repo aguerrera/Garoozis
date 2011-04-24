@@ -25,38 +25,8 @@ open LitS3
 (*
 http://docs.amazonwebservices.com/AmazonS3/latest/dev/index.html?WebsiteHosting.html
 *)
-let source_dir = @"c:\source\Garoozis\sample"
-let output_dir = @"C:\Staging\www\"
-let bucketName = "blog.guerrera.org"
 
-Garoozis.Transformer.build_pages output_dir source_dir
-
-let accessKeyID = ""
-let secretAccessKeyID = ""
-
-let service = new S3Service(AccessKeyID = accessKeyID, SecretAccessKey = secretAccessKeyID)
-(*
-try
-    service.CreateBucket(bucketName)
-finally
-    ()
-*)
-
-
-let get_url (f:string) = 
-        f.ToLower().Replace(output_dir.ToLower(), "").Replace("\\", "/")
-
-let get_contentType (f:string) = 
-    let regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(System.IO.Path.GetExtension(f).ToLower())
-    try
-        regKey.GetValue("Content Type").ToString()
-    with
-    | _ -> "application/unknown"
-
-let files = Garoozis.Utils.get_files(output_dir) 
-            |> Seq.toList
-
-files 
-    |> List.map (fun f -> (f, get_url(f), get_contentType(f)) )
-    |> List.iter (fun (f,u,c) -> service.AddObject(f, bucketName, u, c, LitS3.CannedAcl.PublicRead) )
-
+let configSource = @"c:\source\test.js"
+let config = Garoozis.Utils.get_config(configSource)
+Garoozis.Transformer.build_pages config.OutputDir config.SourceDir
+Garoozis.RemoteStorage.publish_to_s3(config)

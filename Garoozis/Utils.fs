@@ -55,4 +55,15 @@ module Garoozis.Utils
         for subdir in Directory.GetDirectories(source) do
             copy_directory subdir newdest
 
+    let get_contentType (f:string) = 
+        let regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(System.IO.Path.GetExtension(f).ToLower())
+        try
+            regKey.GetValue("Content Type").ToString()
+        with
+        | _ -> "application/unknown"
 
+
+    let get_config (path:string) = 
+        let text = File.ReadAllText(path)
+        let config = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.Config>(text)
+        config

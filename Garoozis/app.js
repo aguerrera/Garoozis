@@ -1,6 +1,6 @@
 ﻿{
-    OutputDir : "someoutputdir",    /*output directory*/
-    SourceDir : "somesourcedir",    /*source directory*/
+    OutputDir : "someoutputdir",
+    SourceDir : "somesourcedir", 
     StorageContainer : "blog",        
     StorageKey : "some_key",          
     StoragePass : "some_password"     

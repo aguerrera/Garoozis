@@ -12,3 +12,5 @@ db.sqlite
 *.orig
 *.pidb
 *.userprefs
+test.js
+
