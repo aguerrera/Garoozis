@@ -35,20 +35,28 @@ let accessKeyID = ""
 let secretAccessKeyID = ""
 
 let service = new S3Service(AccessKeyID = accessKeyID, SecretAccessKey = secretAccessKeyID)
-
+(*
 try
     service.CreateBucket(bucketName)
 finally
     ()
+*)
 
-let files = Garoozis.Utils.get_files(output_dir) 
-            |> Seq.toList
 
 let get_url (f:string) = 
         f.ToLower().Replace(output_dir.ToLower(), "").Replace("\\", "/")
 
-files 
-    |> List.map (fun f -> (f, get_url(f)) )
-    |> List.iter (fun (f,u) -> service.AddObject(f, bucketName, u) )
+let get_contentType (f:string) = 
+    let regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(System.IO.Path.GetExtension(f).ToLower())
+    try
+        regKey.GetValue("Content Type").ToString()
+    with
+    | _ -> "application/unknown"
 
+let files = Garoozis.Utils.get_files(output_dir) 
+            |> Seq.toList
+
+files 
+    |> List.map (fun f -> (f, get_url(f), get_contentType(f)) )
+    |> List.iter (fun (f,u,c) -> service.AddObject(f, bucketName, u, c, LitS3.CannedAcl.PublicRead) )
 
