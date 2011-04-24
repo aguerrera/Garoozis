@@ -6,11 +6,12 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{d2a2e987-7eb3-4522-8f10-f4f5878684fc}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>Garoozis</RootNamespace>
     <AssemblyName>Garoozis</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <Name>Garoozis</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -37,20 +38,27 @@
   <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <ItemGroup>
+    <None Include="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Script1.fsx" />
     <Compile Include="Models.fs" />
     <Compile Include="Utils.fs" />
     <Compile Include="Transformer.fs" />
     <Compile Include="RemoteStorage.fs" />
     <Compile Include="Program.fs" />
-    <None Include="packages.config" />
     <Content Include="app.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="EcmaScript.NET.modified">
       <HintPath>..\packages\YUICompressor.NET.1.5.0.0\lib\NET35\EcmaScript.NET.modified.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="LitS3">
+      <HintPath>..\packages\LitS3.1.0.1\lib\LitS3.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MarkdownSharp">
