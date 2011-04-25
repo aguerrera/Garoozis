@@ -36,13 +36,15 @@ A full model is generated based on your markdown or html files, and then this mo
 
 
 Your source directory should be have the following structure:
-_layouts/   <- your .cshtml Razor templates will be here.
-_posts/     <- your blog posts will be here.  if you name your file 2011-4-20-My-First-Post.md it will get transformed into the file /2011/4/20/My-First-Post.html  Do not create any other directories in the /_posts directory.
+     Layout
+	_layouts/   <- your .cshtml Razor templates will be here.
+	_posts/     <- your blog posts will be here.  if you name your file 2011-4-20-My-First-Post.md it will get transformed into the file /2011/4/20/My-First-Post.html  Do not create any other directories in the /_posts directory.
+	.
 
-You can then have any other html or markdown files. These will be treated as pages (not blog posts). For example:
-index.html 
-error.html
-about.html
+     You can then have any other html or markdown files. These will be treated as pages (not blog posts). For example:
+	index.html 
+	error.html
+	about.html
 
 
 
