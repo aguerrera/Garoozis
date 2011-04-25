@@ -47,11 +47,20 @@ Your source directory should be have the following structure:
 	about.html
 
 
+In each of your files, you will want to add a special configuration Front Matter.  In Jekyll, this is done with YAML.  Here it's JSON because YAML in .NET is beyond my current skill set.
+
+	{
+	  title: "Page One", /* Title of Page */
+	  layout: "post"     /* name of Razor template to use.  For instance, this would use a template _layouts/post.cshtml */
+	}
+        
+        HERE Is where I would start typing the content of my Page!
+
 
 Some Notes:
 -----------
-* like in Jekyll, some info is placed at the top of your text files. it's Json in this case, because using Yaml in .NET is beyond my skills
-* your blog posts are saved in the special _posts folder
+* json front matter is used in all of your posts/pages for additional configuration
+* your blog posts are saved in the special _posts folder in a format, e.g. yyyy-m-d-page-name.md
 * all html or markdown files are processed and spat out as static html
 * garoozis builds a model that is passed to the Razor engine that you can use (all page info, Next/Previous Posts, all Posts, all non-blog post Pages, etc)
 * this static output is written to a staging folder, and is optionally compressed
@@ -66,10 +75,13 @@ Items to Do:
 * Push to Azure
 * project is organized in Modules.  I'd like to make it more .NET friendly
 
+
 Hosting a website at S3
+-----------------------
 The S3 documentation is useful for setting up a website.  [s3](http://docs.amazonwebservices.com/AmazonS3/latest/dev/index.html?WebsiteHosting.html)
 You must first create an S3 bucket and then enable it for use as a website.  Garoozis then pushes the output files to that bucket, which you can then browse. The actual URL that you access this website-enabled bucket with 
 will be provided in the In the AWS Managment Console. See http://test.guerrera.org for the sample output.
+
 
 DNS
 ---
