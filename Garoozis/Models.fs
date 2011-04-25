@@ -10,6 +10,10 @@ type Config() =
     let mutable m_storagecontainer = ""
     let mutable m_storagekey = ""
     let mutable m_storagepass = ""
+    let mutable m_url = ""
+    let mutable m_blogtitle = ""
+    let mutable m_blogdesc = ""
+    let mutable m_compressoutput = true
     member x.OutputDir          with get () = m_outputdir
                                 and set outputdir = m_outputdir <- outputdir
     member x.SourceDir          with get () = m_sourcedir
@@ -20,6 +24,14 @@ type Config() =
                                 and set skey = m_storagekey <- skey
     member x.StoragePass        with get () = m_storagepass
                                 and set spass = m_storagepass <- spass
+    member x.Url                with get () = m_url
+                                and set url = m_url <- url
+    member x.BlogTitle          with get () = m_blogtitle
+                                and set title = m_blogtitle <- title
+    member x.BlogDesc           with get () = m_blogdesc
+                                and set desc = m_blogdesc <- desc
+    member x.CompressOutput     with get () = m_compressoutput
+                                and set compressoutput = m_compressoutput <- compressoutput
 
 // each web page is represented as a Page
 type Page() = 

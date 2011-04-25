@@ -139,12 +139,48 @@ let get_model_from_page (page:Page) (pageList:IEnumerable<Page>) =
         model.PrevPost <- get_prev_post page posts
     model
 
+// build an rss feed, and save it as feed.rss
+let create_rss (posts:IEnumerable<Page>) (url:string) (title:string) (desc:string) (output_dir:string) = 
+    let feed = new Argotic.Syndication.RssFeed()
+    feed.Channel.Link <- new Uri(url)
+    feed.Channel.Title <- title
+    feed.Channel.Description <- desc
+    for p in posts do
+        let item = new Argotic.Syndication.RssItem()
+        item.Title <- p.Title
+        item.Link <- new Uri(url + "/" + p.Url)
+        item.Description <- p.Content
+        feed.Channel.AddItem(item) |> ignore
+    use stream = new FileStream(Path.Combine(output_dir,"feed.rss"), FileMode.Create, FileAccess.Write)
+    feed.Save(stream)
+    ()
+
+// optimize js and css output
+let optimize_output (output_dir:string) = 
+    let extfilter = [| ".js"; ".css" |]
+    let files = 
+        Utils.get_files(output_dir) 
+        |> Seq.map (fun f -> new FileInfo(f))
+        |> Seq.filter (fun f -> Array.exists (fun x-> x = f.Extension) <| extfilter)
+
+    for fi in files do
+        let text = File.ReadAllText(fi.FullName)
+        let compressed = 
+            match fi.Extension with
+            | ".js" -> Yahoo.Yui.Compressor.JavaScriptCompressor.Compress(text)
+            | ".css" -> Yahoo.Yui.Compressor.CssCompressor.Compress(text)
+            | _ -> text
+        File.WriteAllText(fi.FullName, compressed)
+    ()
+
 // main Build method.  this does the following:
 // 1. deletes files from output dir
 // 2. copies non-transformable files to output
 // 3. transforms and copies files to output
-let Build output_dir source_dir =
+let Build (config:Config) =
 
+    let output_dir = config.OutputDir
+    let source_dir = config.SourceDir
     // setup output folder
     if Directory.Exists(output_dir) = false then
         Directory.CreateDirectory(output_dir) |> ignore
@@ -200,5 +236,17 @@ let Build output_dir source_dir =
 
     let page_count = Seq.length pages
     printfn "processed %i pages" page_count
+
+    if config.CompressOutput = true then
+        printfn "optimizing css and js output"
+        optimize_output output_dir
+
+    let posts = pageModels |> Seq.filter (fun p -> is_post(p) = true   ) 
+    if String.IsNullOrEmpty(config.Url) = false then
+        printfn "creating rss"
+        create_rss posts config.Url config.BlogTitle config.BlogDesc config.OutputDir
+
+    printfn "done!"
+
     ()
 
