@@ -3,6 +3,9 @@
 #r @"..\packages\Newtonsoft.Json.4.0.2\lib\net40-full\Newtonsoft.Json.dll"
 #r @"..\packages\RazorEngine.2.1\lib\.NetFramework 4.0\RazorEngine.dll"
 #r @"..\packages\LitS3.1.0.1\lib\LitS3.dll"
+#r @"..\packages\FSPowerPack.Community.2.0.0.0\Lib\Net40\FSharp.PowerPack.dll"
+#r @"..\packages\FSPowerPack.Community.2.0.0.0\Lib\Net40\FSharp.PowerPack.Linq.dll"
+
 
 #r "bin\debug\Garoozis.dll"
 
@@ -22,11 +25,15 @@ open RazorEngine
 open Newtonsoft.Json
 open LitS3
 
+open System.Linq
+open Microsoft.FSharp.Quotations
+
 (*
 http://docs.amazonwebservices.com/AmazonS3/latest/dev/index.html?WebsiteHosting.html
 *)
 
-let configSource = @"c:\source\test.js"
+let configSource = __SOURCE_DIRECTORY__  + @"\test.js"
 let config = Garoozis.Utils.get_config(configSource)
 Garoozis.Transformer.build_pages config.OutputDir config.SourceDir
 Garoozis.RemoteStorage.publish_to_s3(config)
+

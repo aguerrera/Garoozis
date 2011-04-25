@@ -1,6 +1,6 @@
 {
   title: "Andy's Home Page Megamix Error",
-  layout: "post"
+  layout: "page"
 }
 
 An Error has Occurred

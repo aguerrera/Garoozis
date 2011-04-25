@@ -56,10 +56,11 @@ type Model() =
     member x.PrevPost with get () = m_prev
                         and set prev = m_prev <- prev
     member x.Posts with get () = m_posts
+                        and set posts = m_posts <- posts
     member x.Pages with get () = m_pages
+                        and set pages = m_pages <- pages
     member x.Title with get () = m_page.Title
     member x.Content with get () = m_page.Content
     member x.FileName with get () = m_page.FileName
     member x.Layout with get () = m_page.Layout
     member x.Created with get () = m_page.Created
-

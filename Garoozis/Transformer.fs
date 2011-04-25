@@ -13,22 +13,22 @@ open Garoozis.Models
 
 // render page with RazorEngine.  Can't send FSI types into this
 // b/c it uses CodeDom to compile.  Thus and so, this executable.
-let razor_renderer (page:Page) (map:Map<string,string>) =
-    let template = map.[page.Layout]
-    let html = RazorEngine.Razor.Parse(template, page)
+let razor_renderer (model:Model) (map:Map<string,string>) =
+    let template = map.[model.Page.Layout]
+    let html = RazorEngine.Razor.Parse(template, model)
     html
 
 // fake rendering function.  just does a replacement of model values
-let fake_renderer (page:Page) (map:Map<string,string>) =
-    let template = map.[page.Layout]
-                    .Replace("@Model.Title", page.Title)
-                    .Replace("@Model.Content", page.Content)
+let fake_renderer (model:Model) (map:Map<string,string>) =
+    let template = map.[model.Page.Layout]
+                    .Replace("@Model.Title", model.Page.Title)
+                    .Replace("@Model.Content", model.Page.Content)
     template
 
 // this is what is used to render the page contents. 
 // can switch rendering functions as needed.    
-let render_page renderf (page:Page) (map:Map<string,string>) =
-    let html = renderf page map
+let render_page renderf (model:Model) (map:Map<string,string>) =
+    let html = renderf model map
     html
 
 // get the new file name, by looking at the format.  
@@ -84,7 +84,48 @@ let write_output_file (url:string) (content:string) (outdir:string) =
     File.WriteAllText(fout, content)
     () 
 
+// is this a post?  check the filename
+let is_post (page:Page) = 
+    page.FileName.IndexOf("_posts") <> -1
 
+// get the next post. i'd really like to use a fold for this
+let get_next_post (page:Page) (posts:IEnumerable<Page>) = 
+    try
+        let dates = posts |> Seq.map (fun p -> p.Created) |> Seq.toList
+        let dnext = 
+            dates |> List.sort |> List.filter (fun d -> d > page.Created) |> List.head
+        let pnext = posts |> Seq.find (fun p -> p.Created = dnext)
+        pnext
+    with
+    |_ -> new Page()
+
+// get the prev post. i'd really like to use a fold for this
+let get_prev_post (page:Page) (posts:IEnumerable<Page>) = 
+    try
+        let dates = posts |> Seq.map (fun p -> p.Created) |> Seq.toList
+        let dprev = 
+            dates |> List.sort |> List.rev |> List.filter (fun d -> d < page.Created) |> List.head
+        let pprev = posts |> Seq.find (fun p -> p.Created = dprev)
+        pprev
+    with
+    |_ -> new Page()
+
+// build up model to pass to razor template.
+// need to determine Next, Previous pages. As well as all Posts and non-Post pages.
+let get_model_from_page (page:Page) (pageList:IEnumerable<Page>) = 
+    let model = new Model()
+    model.Page <- page
+    let posts = new List<Page>() 
+    posts.AddRange( pageList |> Seq.filter (fun p -> is_post(p) = true   )  )
+    model.Posts <- posts
+    let pages = new List<Page>() 
+    pages.AddRange( pageList |> Seq.filter (fun p -> is_post(p) = false)  )
+    model.Pages <- pages
+    let fi = new FileInfo(page.FileName)
+    if is_post(page) = true then
+        model.NextPost <- get_next_post page posts
+        model.PrevPost <- get_prev_post page posts
+    model
 
 // lets get down to brass tacks
 let build_pages output_dir source_dir =
@@ -105,8 +146,8 @@ let build_pages output_dir source_dir =
         |> Map.ofArray
 
     // get all files in the top level directory, or in the special _posts directory
-    let posts = Directory.GetFiles(source_dir + @"\_posts") 
-    let pages = Directory.GetFiles(source_dir + @"\")
+    let posts = Directory.GetFiles(source_dir + @"\_posts") |> Array.filter ( fun p -> p.StartsWith(".") = false) 
+    let pages = Directory.GetFiles(source_dir + @"\") |> Array.filter ( fun p -> p.StartsWith(".") = false)
 
     let files_to_transorm = pages |> Array.append <| posts 
 
@@ -116,19 +157,25 @@ let build_pages output_dir source_dir =
 
     printfn "copying pages to output: %s" output_dir
 
+    // copy transformed files to output folder
     Directory.GetDirectories(source_dir) 
         |> Seq.map (fun d -> new DirectoryInfo(d))
-        |> Seq.filter (fun d -> d.Name.StartsWith("_") = false )
+        |> Seq.filter (fun d -> d.Name.StartsWith("_") = false && d.Name.StartsWith(".") = false)
         |> Seq.iter (fun d ->
                             printfn "copying dir: %s" d.Name
                             Garoozis.Utils.copy_directory d.FullName output_dir
                             )
                                 
-    files_to_transorm 
+    let pageModels = 
+        files_to_transorm 
         |> Seq.map (fun f -> get_page(f)) 
         |> Seq.toList
-        |> List.iter (fun p -> 
-                    let rendered = render_page renderer p layout_map
+
+
+    pageModels
+        |> Seq.iter (fun p -> 
+                    let model = get_model_from_page p pageModels
+                    let rendered = render_page renderer model layout_map
                     let fn = Path.GetFileName(p.FileName)
                     printfn "   processing page: %s to %s" fn p.Url
                     write_output_file p.Url rendered output_dir                
