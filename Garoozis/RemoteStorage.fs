@@ -21,24 +21,26 @@ let get_items_from_s3 (service:S3Service) (bucketName:string) =
 let delete_all_items_from_s3 (service:S3Service) (bucketName:string) = 
     let items = get_items_from_s3 service bucketName
     for item in items do
-        printfn "s3: deleting item %s" item.Name
+        printfn "   deleting item %s" item.Name
         service.DeleteObject(bucketName,item.Name)
 
 // delete items from your bucket then republish all
-let publish_to_s3 (config:Config)= 
+let PublishToS3 (config:Config)= 
     let service = new LitS3.S3Service(AccessKeyID = config.StorageKey, SecretAccessKey = config.StoragePass)
     let output_dir = config.OutputDir
     let bucketName = config.StorageContainer
 
+    printfn "S3: deleting bucket %s" bucketName
     delete_all_items_from_s3 service bucketName |> ignore
 
     let files = Garoozis.Utils.get_files(config.OutputDir) 
                 |> Seq.toList
 
+    printfn "S3: uploading to bucket %s" bucketName
     files 
         |> List.map (fun f -> (f, get_url(f, output_dir), Garoozis.Utils.get_contentType(f)) )
         |> List.iter (fun (f,u,c) -> 
-            printfn "adding file: %s url: %s content-type:%s" f u c
+            printfn "   adding file: %s url: %s content-type:%s" f u c
             service.AddObject(f, bucketName, u, c, LitS3.CannedAcl.PublicRead) 
             )
 

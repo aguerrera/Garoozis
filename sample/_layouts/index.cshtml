@@ -5,10 +5,12 @@
         @Model.Content
     </div>
     <div>
-    @for (int i = 0; i < 10; i++)
-    {
-        <div>@i. Item</div>
-    }
+        <div>All Posts</div>
+        <ul>
+        @foreach (var post in Model.Posts) {
+         <li><a href="/@post.Url">@post.Title</a></li>   
+        }
+        </ul>
     </div>
 </body>
 </html>

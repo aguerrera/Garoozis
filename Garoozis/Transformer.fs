@@ -88,25 +88,37 @@ let write_output_file (url:string) (content:string) (outdir:string) =
 let is_post (page:Page) = 
     page.FileName.IndexOf("_posts") <> -1
 
-// get the next post. i'd really like to use a fold for this
+
+// get the next post.
 let get_next_post (page:Page) (posts:IEnumerable<Page>) = 
     try
-        let dates = posts |> Seq.map (fun p -> p.Created) |> Seq.toList
-        let dnext = 
-            dates |> List.sort |> List.filter (fun d -> d > page.Created) |> List.head
-        let pnext = posts |> Seq.find (fun p -> p.Created = dnext)
+        let acc (p1:Page) (p2:Page) = 
+            match p1.Created < p2.Created with
+            | true -> p1
+            | false -> p2
+        let nextposts = posts |> Seq.filter (fun p -> p.Created > page.Created) 
+        let head = nextposts |> Seq.head
+        let pnext = nextposts |> Seq.fold acc head
         pnext
     with
     |_ -> new Page()
 
-// get the prev post. i'd really like to use a fold for this
+// get the prev post.
 let get_prev_post (page:Page) (posts:IEnumerable<Page>) = 
     try
-        let dates = posts |> Seq.map (fun p -> p.Created) |> Seq.toList
-        let dprev = 
-            dates |> List.sort |> List.rev |> List.filter (fun d -> d < page.Created) |> List.head
-        let pprev = posts |> Seq.find (fun p -> p.Created = dprev)
+        let acc (p1:Page) (p2:Page) = 
+            match p1.Created > p2.Created with
+            | true -> p1
+            | false -> p2
+        let prevposts = posts |> Seq.filter (fun p -> p.Created < page.Created) 
+        let head = prevposts |> Seq.head
+        let pprev = prevposts |> Seq.fold acc head
         pprev
+        //let dates = posts |> Seq.map (fun p -> p.Created) |> Seq.toList
+        //let dprev = 
+        //    dates |> List.sort |> List.rev |> List.filter (fun d -> d < page.Created) |> List.head
+        //let pprev = posts |> Seq.find (fun p -> p.Created = dprev)
+        //pprev
     with
     |_ -> new Page()
 
@@ -127,14 +139,18 @@ let get_model_from_page (page:Page) (pageList:IEnumerable<Page>) =
         model.PrevPost <- get_prev_post page posts
     model
 
-// lets get down to brass tacks
-let build_pages output_dir source_dir =
+// main Build method.  this does the following:
+// 1. deletes files from output dir
+// 2. copies non-transformable files to output
+// 3. transforms and copies files to output
+let Build output_dir source_dir =
 
     // setup output folder
     if Directory.Exists(output_dir) = false then
         Directory.CreateDirectory(output_dir) |> ignore
 
     // clean up anything in the output director
+    printfn "deleting content from output dir: %s" output_dir
     Garoozis.Utils.delete_files_and_directories(output_dir)
 
 
@@ -172,6 +188,7 @@ let build_pages output_dir source_dir =
         |> Seq.toList
 
 
+    printfn "transforming content and writing to output dir"
     pageModels
         |> Seq.iter (fun p -> 
                     let model = get_model_from_page p pageModels
