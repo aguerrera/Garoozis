@@ -14,10 +14,6 @@ open System.Security.Cryptography
 open System.Text
 open System.Text.RegularExpressions
 
-(*
-http://docs.amazonwebservices.com/AmazonS3/latest/dev/index.html?WebsiteHosting.html
-*)
-
 let configSource = __SOURCE_DIRECTORY__  + @"\test.js"
 let config = Garoozis.Utils.get_config(configSource)
 

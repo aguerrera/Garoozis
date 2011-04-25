@@ -1,9 +1,10 @@
 {
-  title: "Andy's Home Page Megamix",
+  title: "Andy's Test Site Megamix",
   layout: "index"
 }
 
-Welcome to my page!
-=======================
+## Garoozis Razor/F# Templating ##
 
-Have fun!
+![Garoozis](/static/images/dude.jpg "Garoozis")
+
+This is the Garoozis sample site.  

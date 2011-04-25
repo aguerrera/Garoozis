@@ -1,14 +1,25 @@
 ﻿<html>
-<head>@Model.Title</head>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/site.css" />
+    <title>@Model.Title</title>
+</head>
 <body>
-    <div class="content">
-        @Model.Content
-    </div>
-    <div>
-    @for (int i = 0; i < 10; i++)
-    {
-        <div>@i. Item</div>
-    }
+    <div class="page">
+        <div class="header">
+            <h1>Test.Guerrera.Org</h1>
+        </div>
+        <div class="content">
+            @Model.Content
+        </div>
+        <div>
+        @for (int i = 0; i < 10; i++)
+        {
+            <div>@i. Item</div>
+        }
+        </div>
+        <div class="footer">
+            <a href="https://github.com/aguerrera/Garoozis">Garoozis: </a>Static HTML, FTW!
+        </div>
     </div>
 </body>
 </html>

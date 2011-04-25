@@ -43,6 +43,7 @@ module Garoozis.Utils
         dirs |> List.iter (fun d -> Directory.Delete(d))
         ()
 
+    // copy a directory
     let rec copy_directory source dest = 
         let newdest = Path.Combine(dest, Path.GetFileName(source))
         if Directory.Exists(newdest) = false then Directory.CreateDirectory(newdest) |> ignore
@@ -55,6 +56,7 @@ module Garoozis.Utils
         for subdir in Directory.GetDirectories(source) do
             copy_directory subdir newdest
 
+    // get the content-type of a file
     let get_contentType (f:string) = 
         let regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(System.IO.Path.GetExtension(f).ToLower())
         try
@@ -62,7 +64,7 @@ module Garoozis.Utils
         with
         | _ -> "application/unknown"
 
-
+    // read a js file and deserialize to a Config object
     let get_config (path:string) = 
         let text = File.ReadAllText(path)
         let config = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.Config>(text)

@@ -1,16 +1,27 @@
 ﻿<html>
-<head>@Model.Title</head>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/site.css" />
+    <title>@Model.Title</title>
+</head>
 <body>
-    <div class="content">
-        @Model.Content
-    </div>
-    <div>
-        <div>All Posts</div>
-        <ul>
-        @foreach (var post in Model.Posts) {
-         <li><a href="/@post.Url">@post.Title</a></li>   
-        }
-        </ul>
+    <div class="page">
+        <div class="header">
+            <h1>Test.Guerrera.Org</h1>
+        </div>
+        <div class="content">
+            @Model.Content
+        </div>
+        <div>
+            <div>All Posts</div>
+            <ul>
+            @foreach (var post in Model.Posts) {
+             <li><a href="/@post.Url">@post.Title</a></li>   
+            }
+            </ul>
+        </div>
+        <div class="footer">
+            <a href="https://github.com/aguerrera/Garoozis">Garoozis: </a>Static HTML, FTW!
+        </div>
     </div>
 </body>
 </html>
