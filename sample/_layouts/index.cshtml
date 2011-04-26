@@ -15,8 +15,9 @@
         <div>
             <div>All Posts</div>
             <ul>
-            @foreach (var post in Model.Posts) {
-             <li><a href="/@post.Url">@post.Title</a></li>   
+            @foreach (var post in Model.Posts.OrderByDescending(x => x.Created) )
+            {
+                <li><a href="/@post.Url">@post.Title</a></li>   
             }
             </ul>
         </div>

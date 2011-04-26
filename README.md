@@ -29,11 +29,13 @@ A full model is generated based on your markdown or html files, and then this mo
 		<div>Prev: <a href="../@Model.PrevPost.Url">@Model.PrevPost.Title</a></div>
 	}
 
-	@for (int i = 0; i < 10; i++)
-	{
-		<div>@i. Item</div>
-	}
-	</div>
+    CREATE INDEX OF ALL POSTS
+    <ul>
+    @foreach (var post in Model.Posts.OrderByDescending(x => x.Created) )
+    {
+        <li><a href="/@post.Url">@post.Title</a></li>   
+    }
+    </ul>
 
 
 Your source directory should be have the following structure:
