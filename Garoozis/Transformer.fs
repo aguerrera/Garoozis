@@ -84,10 +84,10 @@ let write_output_file (url:string) (content:string) (outdir:string) =
     File.WriteAllText(fout, content)
     () 
 
+
 // is this a post?  check the filename
 let is_post (page:Page) = 
     page.FileName.IndexOf("_posts") <> -1
-
 
 // get the next post.
 let get_next_post (page:Page) (posts:IEnumerable<Page>) = 
@@ -114,11 +114,6 @@ let get_prev_post (page:Page) (posts:IEnumerable<Page>) =
         let head = prevposts |> Seq.head
         let pprev = prevposts |> Seq.fold acc head
         pprev
-        //let dates = posts |> Seq.map (fun p -> p.Created) |> Seq.toList
-        //let dprev = 
-        //    dates |> List.sort |> List.rev |> List.filter (fun d -> d < page.Created) |> List.head
-        //let pprev = posts |> Seq.find (fun p -> p.Created = dprev)
-        //pprev
     with
     |_ -> new Page()
 
@@ -181,6 +176,7 @@ let Build (config:Config) =
 
     let output_dir = config.OutputDir
     let source_dir = config.SourceDir
+
     // setup output folder
     if Directory.Exists(output_dir) = false then
         Directory.CreateDirectory(output_dir) |> ignore
@@ -188,7 +184,6 @@ let Build (config:Config) =
     // clean up anything in the output director
     printfn "deleting content from output dir: %s" output_dir
     Garoozis.Utils.delete_files_and_directories(output_dir)
-
 
     // the .cshtml Razor templates are the'Layouts', in the vernacular
     // this is a map of the key:filename, value=actual razor template content.
@@ -203,10 +198,6 @@ let Build (config:Config) =
 
     let files_to_transorm = pages |> Array.append <| posts 
 
-    // the actual renderer to be used.  you can use a fake_renderer to bypass
-    // any issues with Razor
-    let renderer = razor_renderer
-
     printfn "copying pages to output: %s" output_dir
 
     // copy transformed files to output folder
@@ -215,35 +206,42 @@ let Build (config:Config) =
         |> Seq.filter (fun d -> d.Name.StartsWith("_") = false && d.Name.StartsWith(".") = false)
         |> Seq.iter (fun d ->
                             printfn "copying dir: %s" d.Name
-                            Garoozis.Utils.copy_directory d.FullName output_dir
+                            Utils.copy_directory d.FullName output_dir
                             )
-                                
+
+    // build list of page models
     let pageModels = 
         files_to_transorm 
         |> Seq.map (fun f -> get_page(f)) 
         |> Seq.toList
 
+    // the actual renderer to be used.  you can use a fake_renderer to bypass
+    // any issues with Razor
+    let renderer = razor_renderer
 
     printfn "transforming content and writing to output dir"
+
+    // cycle through page models and render the html using each model
     pageModels
         |> Seq.iter (fun p -> 
-                    let model = get_model_from_page p pageModels
-                    let rendered = render_page renderer model layout_map
-                    let fn = Path.GetFileName(p.FileName)
-                    printfn "   processing page: %s to %s" fn p.Url
-                    write_output_file p.Url rendered output_dir                
+                        let model = get_model_from_page p pageModels // gets a model with more details
+                        let rendered = render_page renderer model layout_map
+                        let fn = Path.GetFileName(p.FileName)
+                        printfn "   processing page: %s to %s" fn p.Url
+                        write_output_file p.Url rendered output_dir                
                     )
 
-    let page_count = Seq.length pages
-    printfn "processed %i pages" page_count
+    printfn "processed %i pages" <| Seq.length pages
 
+    // compress js and css using YUI
     if config.CompressOutput = true then
         printfn "optimizing css and js output"
         optimize_output output_dir
 
-    let posts = pageModels |> Seq.filter (fun p -> is_post(p) = true   ) 
+    // create a blog
     if String.IsNullOrEmpty(config.Url) = false then
         printfn "creating rss"
+        let posts = pageModels |> Seq.filter (fun p -> is_post(p) = true   ) 
         create_rss posts config.Url config.BlogTitle config.BlogDesc config.OutputDir
 
     printfn "done!"
