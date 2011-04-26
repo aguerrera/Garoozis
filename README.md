@@ -20,11 +20,11 @@ A full model is generated based on your markdown or html files, and then this mo
 
     SHOW NEXT AND PREVIOUS POSTS
 	<div>
-	@if (Model.NextPost != null && Model.NextPost.Title != "")
+	@if (Model.NextPost.Title != "")
 	{
 		<div>Next: <a href="../@Model.NextPost.Url">@Model.NextPost.Title</a></div>
 	}
-	@if (Model.PrevPost != null && Model.PrevPost.Title != "")
+	@if (Model.PrevPost.Title != "")
 	{
 		<div>Prev: <a href="../@Model.PrevPost.Url">@Model.PrevPost.Title</a></div>
 	}
