@@ -14,6 +14,8 @@ type Config() =
     let mutable m_blogtitle = ""
     let mutable m_blogdesc = ""
     let mutable m_compressoutput = true
+    let mutable m_deleteexistingstorage = false
+
     member x.OutputDir          with get () = m_outputdir
                                 and set outputdir = m_outputdir <- outputdir
     member x.SourceDir          with get () = m_sourcedir
@@ -32,7 +34,10 @@ type Config() =
                                 and set desc = m_blogdesc <- desc
     member x.CompressOutput     with get () = m_compressoutput
                                 and set compressoutput = m_compressoutput <- compressoutput
+    member x.DeleteExistingStorage     with get () = m_deleteexistingstorage
+                                       and set deleteexistingstorage = m_deleteexistingstorage <- deleteexistingstorage
 
+                                
 // each web page is represented as a Page
 type Page() = 
     let mutable m_title = ""

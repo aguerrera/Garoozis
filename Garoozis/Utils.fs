@@ -56,13 +56,20 @@ module Garoozis.Utils
         for subdir in Directory.GetDirectories(source) do
             copy_directory subdir newdest
 
-    // get the content-type of a file
-    let get_contentType (f:string) = 
-        let regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(System.IO.Path.GetExtension(f).ToLower())
+    // hit the registry to get the contentType
+    let get_contentType_from_registry (ext:string) = 
+        let rk = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext.ToLower())
         try
-            regKey.GetValue("Content Type").ToString()
+            rk.GetValue("Content Type").ToString()
         with
         | _ -> "application/unknown"
+
+    // get the content-type of a file
+    let get_contentType (f:string) = 
+        let ext = System.IO.Path.GetExtension(f).ToLower()
+        match ext with
+        | ".rss" -> "application/rss+xml"
+        | _ -> get_contentType_from_registry ext
 
     // read a js file and deserialize to a Config object
     let get_config (path:string) = 

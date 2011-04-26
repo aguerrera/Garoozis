@@ -1,7 +1,8 @@
 Garoozis let's you publish static HTML files using F# and Razor Templates.
 ==========================================================================
 
-Use this tool for simple website hosting. With it you can
+Use this tool for simple website hosting. With it you can:
+
 * create static html pages by transforming markdown or html with Razor templates
 * copy these static files to Amazon S3 Windows Azure Blob storage for website hosting
 
@@ -37,14 +38,15 @@ A full model is generated based on your markdown or html files, and then this mo
 
 Your source directory should be have the following structure:
      Layout
-	_layouts/   <- your .cshtml Razor templates will be here.
-	_posts/     <- your blog posts will be here.  if you name your file 2011-4-20-My-First-Post.md it will get transformed into the file /2011/4/20/My-First-Post.html  Do not create any other directories in the /_posts directory.
+     _layouts/   <- your .cshtml Razor templates will be here.
+     _posts/     <- your blog posts will be here.  if you name your file 2011-4-20-My-First-Post.md it will get transformed into the file /2011/4/20/My-First-Post.html  
+                 Do not create any other directories in the /_posts directory.
 	.
 
      You can then have any other html or markdown files. These will be treated as pages (not blog posts). For example:
-	index.html 
-	error.html
-	about.html
+     index.html 
+     error.html
+     about.html
 
 
 In each of your files, you will want to add a special configuration Front Matter.  In Jekyll, this is done with YAML.  Here it's JSON because YAML in .NET is beyond my current skill set.
@@ -80,7 +82,7 @@ Hosting a website at S3
 -----------------------
 The S3 documentation is useful for setting up a website.  [s3](http://docs.amazonwebservices.com/AmazonS3/latest/dev/index.html?WebsiteHosting.html)
 You must first create an S3 bucket and then enable it for use as a website.  Garoozis then pushes the output files to that bucket, which you can then browse. The actual URL that you access this website-enabled bucket with 
-will be provided in the In the AWS Managment Console. See http://test.guerrera.org for the sample output.
+will be provided in the In the AWS Managment Console. See http://garoozis.guerrera.org for the sample output.
 
 
 DNS

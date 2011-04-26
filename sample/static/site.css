@@ -1,9 +1,8 @@
-
 body { font-family:Georgia,Serif;}
 a {color:orange}
 .page { width:500px; margin-left:auto; margin-right:auto;}
-.header { background-color:orange;color:#fff;}
+.header { background-color:orange;color:#fff;padding:5px;}
 .content { font-size:14px; padding: 10px;}
-.pager { border:1px sold #ff0000;padding:4px;font-size:12px; } 
-.footer { background-color:#a0a0a0;color:#000;font-size:18px;}
-.footer a { color:#000;}
+.pager { border:1px sold #ff0000;padding:4px;font-size:12px;} 
+.footer { background-color:orange;color:#fff;font-size:18px;padding:5px;}
+.footer a { color:#fff;}

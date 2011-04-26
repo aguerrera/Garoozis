@@ -30,8 +30,9 @@ let PublishToS3 (config:Config)=
     let output_dir = config.OutputDir
     let bucketName = config.StorageContainer
 
-    printfn "S3: deleting bucket %s" bucketName
-    delete_all_items_from_s3 service bucketName |> ignore
+    if config.DeleteExistingStorage = true then
+        printfn "S3: deleting items from bucket %s" bucketName
+        delete_all_items_from_s3 service bucketName |> ignore
 
     let files = Garoozis.Utils.get_files(config.OutputDir) 
                 |> Seq.toList
