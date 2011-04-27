@@ -151,6 +151,12 @@ let create_rss (posts:IEnumerable<Page>) (url:string) (title:string) (desc:strin
     feed.Save(stream)
     ()
 
+let get_layout_map source_dir = 
+    Directory.GetFiles(source_dir + @"\_layouts")
+    |> Array.map (fun f -> (Path.GetFileNameWithoutExtension(f), File.ReadAllText(f)  ))
+    |> Map.ofArray
+
+
 // optimize js and css output
 let optimize_output (output_dir:string) = 
     let extfilter = [| ".js"; ".css" |]
@@ -169,6 +175,37 @@ let optimize_output (output_dir:string) =
         File.WriteAllText(fi.FullName, compressed)
     ()
 
+
+// get the rendered output for a url
+let RenderPageForUrl (url:string) (config:Config) = 
+
+    let output_dir = config.OutputDir
+    let source_dir = config.SourceDir
+    let layout_map = get_layout_map source_dir
+    let posts = Directory.GetFiles(source_dir + @"\_posts") |> Array.filter ( fun p -> p.StartsWith(".") = false) 
+    let pages = Directory.GetFiles(source_dir + @"\") |> Array.filter ( fun p -> p.StartsWith(".") = false)
+
+    let files_to_transorm = pages |> Array.append <| posts 
+    let pageModels = 
+        files_to_transorm 
+        |> Seq.map (fun f -> get_page(f)) 
+        |> Seq.filter (fun p -> p.FileName <> "")
+        |> Seq.toList
+
+    // the actual renderer to be used.  you can use a fake_renderer to bypass
+    // any issues with Razor
+    let renderer = razor_renderer
+
+    printfn "rendering page: %s" url
+
+    let page = pageModels |> Seq.find (fun p -> p.Url = url)
+
+    let model = get_model_from_page page pageModels // gets a model with more details
+    let rendered = render_page renderer model layout_map
+    rendered
+
+
+
 // main Build method.  this does the following:
 // 1. deletes files from output dir
 // 2. copies non-transformable files to output
@@ -186,19 +223,6 @@ let Build (config:Config) =
     printfn "deleting content from output dir: %s" output_dir
     Garoozis.Utils.delete_files_and_directories(output_dir)
 
-    // the .cshtml Razor templates are the'Layouts', in the vernacular
-    // this is a map of the key:filename, value=actual razor template content.
-    let layout_map = 
-        Directory.GetFiles(source_dir + @"\_layouts")
-        |> Array.map (fun f -> (Path.GetFileNameWithoutExtension(f), File.ReadAllText(f)  ))
-        |> Map.ofArray
-
-    // get all files in the top level directory, or in the special _posts directory
-    let posts = Directory.GetFiles(source_dir + @"\_posts") |> Array.filter ( fun p -> p.StartsWith(".") = false) 
-    let pages = Directory.GetFiles(source_dir + @"\") |> Array.filter ( fun p -> p.StartsWith(".") = false)
-
-    let files_to_transorm = pages |> Array.append <| posts 
-
     printfn "copying pages to output: %s" output_dir
 
     // copy transformed files to output folder
@@ -209,6 +233,17 @@ let Build (config:Config) =
                             printfn "copying dir: %s" d.Name
                             Utils.copy_directory d.FullName output_dir
                             )
+
+    // the .cshtml Razor templates are the'Layouts', in the vernacular
+    // this is a map of the key:filename, value=actual razor template content.
+    let layout_map = get_layout_map source_dir
+
+    // get all files in the top level directory, or in the special _posts directory
+    let posts = Directory.GetFiles(source_dir + @"\_posts") |> Array.filter ( fun p -> p.StartsWith(".") = false) 
+    let pages = Directory.GetFiles(source_dir + @"\") |> Array.filter ( fun p -> p.StartsWith(".") = false)
+
+    let files_to_transorm = pages |> Array.append <| posts 
+
 
     // build list of page models
     let pageModels = 

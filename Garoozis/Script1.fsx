@@ -21,6 +21,8 @@ Garoozis.Transformer.Build(config)
 Garoozis.RemoteStorage.PublishToS3(config)
 //Garoozis.WebServer.StartOutputHttpListener 8085 config
 
+// 1. do dev server
+
 printfn "source: %s" configSource
 printfn "outputdir: %s" config.OutputDir
 
