@@ -64,15 +64,16 @@ let get_page_from_front_matter (text:string) =
 let get_page filename = 
     let text = File.ReadAllText(filename)
     let page = get_page_from_front_matter(text)
-    let contents = text.Substring(text.IndexOf("}") + 1)
-    page.FileName <- filename
-    if page.Url = "" then page.Url <- get_url_from_filename(Path.GetFileName(filename))
-    if page.Created = DateTime.MinValue then 
-        let fi = new FileInfo(filename)
-        page.Created <- fi.CreationTime
-    match Path.GetExtension(filename) with
-    | ".md" -> page.Content <- Garoozis.Utils.md_to_html(contents)
-    | _ -> page.Content <- contents
+    if page.Title <> "" then
+        let contents = text.Substring(text.IndexOf("}") + 1)
+        page.FileName <- filename
+        if page.Url = "" then page.Url <- get_url_from_filename(Path.GetFileName(filename))
+        if page.Created = DateTime.MinValue then 
+            let fi = new FileInfo(filename)
+            page.Created <- fi.CreationTime
+        match Path.GetExtension(filename) with
+        | ".md" -> page.Content <- Garoozis.Utils.md_to_html(contents)
+        | _ -> page.Content <- contents
     page
 
 // write the transformed content to some file, whatever the output dir is
@@ -146,7 +147,7 @@ let create_rss (posts:IEnumerable<Page>) (url:string) (title:string) (desc:strin
         item.Link <- new Uri(url + "/" + p.Url)
         item.Description <- p.Content
         feed.Channel.AddItem(item) |> ignore
-    use stream = new FileStream(Path.Combine(output_dir,"feed.rss"), FileMode.Create, FileAccess.Write)
+    use stream = new FileStream(Path.Combine(output_dir,"rss.xml"), FileMode.Create, FileAccess.Write)
     feed.Save(stream)
     ()
 
@@ -213,6 +214,7 @@ let Build (config:Config) =
     let pageModels = 
         files_to_transorm 
         |> Seq.map (fun f -> get_page(f)) 
+        |> Seq.filter (fun p -> p.FileName <> "")
         |> Seq.toList
 
     // the actual renderer to be used.  you can use a fake_renderer to bypass

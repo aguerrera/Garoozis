@@ -19,3 +19,11 @@ let config = Garoozis.Utils.get_config(configSource)
 
 Garoozis.Transformer.Build(config)
 Garoozis.RemoteStorage.PublishToS3(config)
+//Garoozis.WebServer.StartOutputHttpListener 8085 config
+
+printfn "source: %s" configSource
+printfn "outputdir: %s" config.OutputDir
+
+
+
+

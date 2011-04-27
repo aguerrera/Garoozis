@@ -43,6 +43,7 @@
     <Compile Include="Utils.fs" />
     <Compile Include="Transformer.fs" />
     <Compile Include="RemoteStorage.fs" />
+    <Compile Include="WebServer.fs" />
     <Content Include="app.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -86,6 +87,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Razor">
       <HintPath>..\packages\RazorEngine.2.1\lib\.NetFramework 4.0\System.Web.Razor.dll</HintPath>
       <Private>True</Private>
