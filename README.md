@@ -70,13 +70,13 @@ In each of your files, you will want to add a special configuration Front Matter
 
 	
 Once you have your folder structured properly, you are ready to go.  You will need to set up a config.js file (see the sample app.js file).  Then you can set up Build.fsx, Publish.fsx, and Dev.fsx files.  
-See the www.guerrera.org repository for examples.  You can then right click on these files to run via F# Interactive, or you can go to the command line and type:
+See the sample folder for examples.  You can then right click on these files to run via F# Interactive, or you can go to the command line and type:
 
 	> fsi dev.fsx  // to start a server at http://localhost:8088  
                    // you can then browse to this as you write your content in markdown or update your
 				   // Razor templates
 	> fsi build.fsx   // to build
-	> fsi publish.fsix  // to publish to s3
+	> fsi publish.fsx  // to publish to s3
 	
 
 Some Notes:
