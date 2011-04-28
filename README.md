@@ -49,9 +49,9 @@ To set up your site, your source directory should be have the following structur
 
      Layout
      _layouts/   <- your .cshtml Razor templates will be here.
-     _posts/     <- your blog posts will be here.  if you name your file 2011-4-20-My-First-Post.md it will get transformed into the file /2011/4/20/My-First-Post.html  
-                 Do not create any other directories in the /_posts directory.
-	.
+     _posts/     <- your blog posts will be here.  if you name your file 2011-4-20-My-First-Post.md it 
+	             will get transformed into the file /2011/4/20/My-First-Post.html  
+   	.
 
      You can then have any other html or markdown files. These will be treated as pages (not blog posts). For example:
      index.html 
@@ -71,6 +71,7 @@ In each of your files, you will want to add a special configuration Front Matter
 	
 Once you have your folder structured properly, you are ready to go.  You will need to set up a config.js file (see the sample app.js file).  Then you can set up Build.fsx, Publish.fsx, and Dev.fsx files.  
 See the www.guerrera.org repository for examples.  You can then right click on these files to run via F# Interactive, or you can go to the command line and type:
+
 	> fsi dev.fsx  // to start a server at http://localhost:8088  
                    // you can then browse to this as you write your content in markdown or update your
 				   // Razor templates
