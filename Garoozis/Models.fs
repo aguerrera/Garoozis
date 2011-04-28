@@ -13,6 +13,7 @@ type Config() =
     let mutable m_url = ""
     let mutable m_blogtitle = ""
     let mutable m_blogdesc = ""
+    let mutable m_blogauthor = ""
     let mutable m_compressoutput = true
     let mutable m_deleteexistingstorage = false
 
@@ -36,6 +37,8 @@ type Config() =
                                 and set compressoutput = m_compressoutput <- compressoutput
     member x.DeleteExistingStorage     with get () = m_deleteexistingstorage
                                        and set deleteexistingstorage = m_deleteexistingstorage <- deleteexistingstorage
+    member x.BlogAuthor         with get () = m_blogauthor
+                                and set author = m_blogauthor <- author
 
                                 
 // each web page is represented as a Page

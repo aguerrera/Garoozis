@@ -34,7 +34,7 @@ let get_url_list www_dir =
         if f.IndexOf("_post/") <> -1 then
             Transformer.get_url_from_filename(f).Replace(www_dir, "").Replace("\\", "/").Substring(1)
         else 
-            f.Replace(www_dir, "").Replace("\\", "/").Substring(1)
+            f.Replace(www_dir, "").Replace("\\", "/").Replace(".md",".html").Substring(1)
 
     files |> Seq.map (fun f -> urlify(f)) |> Seq.toList
 

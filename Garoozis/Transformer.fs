@@ -139,17 +139,19 @@ let get_model_from_page (page:Page) (pageList:IEnumerable<Page>) =
     model
 
 // build an rss feed, and save it as feed.rss
-let create_rss (posts:IEnumerable<Page>) (url:string) (title:string) (desc:string) (output_dir:string) = 
+let create_rss (posts:IEnumerable<Page>) (url:string) (title:string) (desc:string) (author:string) (output_dir:string) = 
     let feed = new Argotic.Syndication.RssFeed()
     feed.Channel.Link <- new Uri(url)
     feed.Channel.Title <- title
     feed.Channel.Description <- desc
+    feed.Channel.Copyright <- author
     for p in posts do
         let itemurl = new Uri(url + "/" + p.Url)
         let item = new Argotic.Syndication.RssItem()
         item.Guid <- new Argotic.Syndication.RssGuid(itemurl.ToString(),true)
         item.Title <- p.Title
         item.Link <- itemurl
+        item.Author <- author
         item.Description <- p.Content
         feed.Channel.AddItem(item) |> ignore
     use stream = new FileStream(Path.Combine(output_dir,"rss.xml"), FileMode.Create, FileAccess.Write)
@@ -283,7 +285,7 @@ let Build (config:Config) =
     if String.IsNullOrEmpty(config.Url) = false then
         printfn "creating rss"
         let posts = pageModels |> Seq.filter (fun p -> is_post(p) = true   ) 
-        create_rss posts config.Url config.BlogTitle config.BlogDesc config.OutputDir
+        create_rss posts config.Url config.BlogTitle config.BlogDesc config.BlogAuthor config.OutputDir
 
     printfn "done!"
 

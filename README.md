@@ -69,14 +69,33 @@ In each of your files, you will want to add a special configuration Front Matter
     HERE Is where I would start typing the content of my Page!
 
 	
-Once you have your folder structured properly, you are ready to go.  You will need to set up a config.js file (see the sample app.js file).  Then you can set up Build.fsx, Publish.fsx, and Dev.fsx files.  
-See the sample folder for examples.  You can then right click on these files to run via F# Interactive, or you can go to the command line and type:
+Once you have your folder structured properly, you are ready to go.  You will need to set up a config.js file (see the sample app.js file).  
+	{
+		OutputDir : "c:\\someoutputdir\\www",
+		SourceDir : "c:\\somesourcedir\\mysite", 
+		StorageContainer : "blog.at-your-site.com",  /* this is the S3 bucket name */        
+		StorageKey : "some_key",          /* this is the AWS key */
+		StoragePass : "some_password",    /* this is the AWS password */
+		DeleteExistingStorage : false,    /* if true, it deletes all of your files from the bucket before posting */
+		Url : "http://your site.org",     /* your site url
+		BlogTitle : "your blog title - used in rss feed",    /* title of your blog */       
+		BlogDesc : "your blog desc - used in rss feed",      /* blog description */
+		BlogAuthor: "Joe Briefcase",      /* author */
+		CompressOutput : true      /* use YUI compress to compress js and css */
+	}
 
-	> fsi dev.fsx  // to start a server at http://localhost:8088  
-                   // you can then browse to this as you write your content in markdown or update your
-				   // Razor templates
-	> fsi build.fsx   // to build
-	> fsi publish.fsx  // to publish to s3
+Please note, you most likely *DO NOT* want to keep this config under source control if your AWS credentials are in there.  You can also instantiate a config object in the script if you so choose.
+
+Then you can set up Build.fsx, Publish.fsx, and Dev.fsx files.  See the sample folder for examples.  You can then right click on these files to run via F# Interactive, or you can go to the command line and type:
+
+	> fsi dev.fsx           // to start a server at http://localhost:8088  
+                            // you can then browse to this as you write your content in markdown or update your
+				            // Razor templates
+				            // Note that you need administratrive privileges for this.  So launch the command line with "Run as Administrator"
+	> fsi dev.fsx --static  // this will start the server at http://localhost:8088 for your static html site that garoozis spits out.  
+							//This is helpful for viewing the end product.
+	> fsi build.fsx	        // to build the static files
+	> fsi publish.fsx       // to publish to s3
 	
 
 Some Notes:

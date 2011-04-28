@@ -8,5 +8,6 @@
     Url : "http://garoozis.guerrera.org",        
     BlogTitle : "garoozis.guerrera.org blog",        
     BlogDesc : "garoozis.guerrera.org",
+    BlogAuthor : "Joe Briefcase",
     CompressOutput : true
 }
