@@ -70,6 +70,7 @@ In each of your files, you will want to add a special configuration Front Matter
 
 	
 Once you have your folder structured properly, you are ready to go.  You will need to set up a config.js file (see the sample app.js file).  
+
 	{
 		OutputDir : "c:\\someoutputdir\\www",
 		SourceDir : "c:\\somesourcedir\\mysite", 
@@ -89,12 +90,15 @@ Please note, you most likely *DO NOT* want to keep this config under source cont
 Then you can set up Build.fsx, Publish.fsx, and Dev.fsx files.  See the sample folder for examples.  You can then right click on these files to run via F# Interactive, or you can go to the command line and type:
 
 	> fsi dev.fsx           // to start a server at http://localhost:8088  
-                            // you can then browse to this as you write your content in markdown or update your
-				            // Razor templates
-				            // Note that you need administratrive privileges for this.  So launch the command line with "Run as Administrator"
+                                // you can then browse to this as you write your content in markdown or update your
+                                // Razor templates
+                                // Note that you need administratrive privileges for this.  So launch the command line with "Run as Administrator"
+
 	> fsi dev.fsx --static  // this will start the server at http://localhost:8088 for your static html site that garoozis spits out.  
-							//This is helpful for viewing the end product.
+                                // This is helpful for viewing the end product.
+
 	> fsi build.fsx	        // to build the static files
+
 	> fsi publish.fsx       // to publish to s3
 	
 
