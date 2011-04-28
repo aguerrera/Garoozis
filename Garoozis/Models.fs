@@ -39,6 +39,7 @@ type Config() =
 
                                 
 // each web page is represented as a Page
+[<AllowNullLiteral>]
 type Page() = 
     let mutable m_title = ""
     let mutable m_content = ""

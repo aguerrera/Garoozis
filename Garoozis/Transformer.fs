@@ -56,7 +56,10 @@ let get_page_from_front_matter (text:string) =
     try
         let jsonHeader = text.Substring(0, text.IndexOf("}") + 1)
         let page = JsonConvert.DeserializeObject<Page>(jsonHeader)
-        page
+        if page = null then
+            new Page()
+        else
+            page
     with
         _ -> new Page()
 
@@ -64,7 +67,7 @@ let get_page_from_front_matter (text:string) =
 let get_page filename = 
     let text = File.ReadAllText(filename)
     let page = get_page_from_front_matter(text)
-    if page.Title <> "" then
+    if String.IsNullOrWhiteSpace(page.Title) = false then
         let contents = text.Substring(text.IndexOf("}") + 1)
         page.FileName <- filename
         if page.Url = "" then page.Url <- get_url_from_filename(Path.GetFileName(filename))
@@ -142,15 +145,18 @@ let create_rss (posts:IEnumerable<Page>) (url:string) (title:string) (desc:strin
     feed.Channel.Title <- title
     feed.Channel.Description <- desc
     for p in posts do
+        let itemurl = new Uri(url + "/" + p.Url)
         let item = new Argotic.Syndication.RssItem()
+        item.Guid <- new Argotic.Syndication.RssGuid(itemurl.ToString(),true)
         item.Title <- p.Title
-        item.Link <- new Uri(url + "/" + p.Url)
+        item.Link <- itemurl
         item.Description <- p.Content
         feed.Channel.AddItem(item) |> ignore
     use stream = new FileStream(Path.Combine(output_dir,"rss.xml"), FileMode.Create, FileAccess.Write)
     feed.Save(stream)
     ()
 
+// build map of files in layout directory
 let get_layout_map source_dir = 
     Directory.GetFiles(source_dir + @"\_layouts")
     |> Array.map (fun f -> (Path.GetFileNameWithoutExtension(f), File.ReadAllText(f)  ))
@@ -177,10 +183,8 @@ let optimize_output (output_dir:string) =
 
 
 // get the rendered output for a url
-let RenderPageForUrl (url:string) (config:Config) = 
+let RenderPageForUrl (url:string) (source_dir:string) = 
 
-    let output_dir = config.OutputDir
-    let source_dir = config.SourceDir
     let layout_map = get_layout_map source_dir
     let posts = Directory.GetFiles(source_dir + @"\_posts") |> Array.filter ( fun p -> p.StartsWith(".") = false) 
     let pages = Directory.GetFiles(source_dir + @"\") |> Array.filter ( fun p -> p.StartsWith(".") = false)
@@ -198,7 +202,7 @@ let RenderPageForUrl (url:string) (config:Config) =
 
     printfn "rendering page: %s" url
 
-    let page = pageModels |> Seq.find (fun p -> p.Url = url)
+    let page = pageModels |> Seq.find (fun p -> p.Url.ToLower() = url.ToLower())
 
     let model = get_model_from_page page pageModels // gets a model with more details
     let rendered = render_page renderer model layout_map

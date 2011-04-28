@@ -17,12 +17,10 @@ open System.Text.RegularExpressions
 let configSource = __SOURCE_DIRECTORY__  + @"\test.js"
 let config = Garoozis.Utils.get_config(configSource)
 
+
 Garoozis.Transformer.Build(config)
 Garoozis.RemoteStorage.PublishToS3(config)
-//Garoozis.WebServer.StartOutputHttpListener 8085 config
-
-// 1. do dev server
-
+//Garoozis.WebServer.Start 8085 config.SourceDir false
 printfn "source: %s" configSource
 printfn "outputdir: %s" config.OutputDir
 
