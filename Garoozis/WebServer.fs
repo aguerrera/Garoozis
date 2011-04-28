@@ -51,10 +51,11 @@ let get_default_doc (urls:IEnumerable<string>) =
     else
         system_default_doc_name
 
+// this gets a list of pages for the error screen
 let get_html_list (xs:IEnumerable<string>) = 
     let sb = new StringBuilder()
     for s in xs do
-        sb.Append("<li><a style='color:white' href='") |> ignore
+        sb.Append("<li><a style='color:white' href='/") |> ignore
         sb.Append(s) |> ignore
         sb.Append("'>") |> ignore
         sb.Append(s) |> ignore

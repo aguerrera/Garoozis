@@ -1,15 +1,20 @@
-Garoozis let's you publish static HTML files using F# and Razor Templates.
-==========================================================================
+Create a blog with static HTML files using Razor Templates, HTML, and Markdown
+==============================================================================
 
-Use this tool for simple website hosting. With it you can:
+### Then post your site to S3 (or anywhere you want it published) ###
+
+Garoozis is for simple website hosting or blogging. With it you can:
 
 * create static html pages by transforming markdown or html with Razor templates
+* process files in a special /_posts directory into a blog (with rss)
 * copy these static files to Amazon S3 Windows Azure Blob storage for website hosting
+* use the built in development server to edit your markdown and templates and see what the output looks like in your browser (change the .cshtml and hit F5!)
+* use the built in development server to preview your static site
 
-This is kind of like [Jekyll](https://github.com/mojombo/jekyll), but for .NET.  And without the Git integration (so it's not really that much like Jekyll).  So it is what it is.  
+This is kind of like [Jekyll](https://github.com/mojombo/jekyll), but for .NET.  And without the Git integration (so it's not really that much like Jekyll (there are no SCM dependencies)).  So it is what it is.  
 The way I use it is that I point Garoozis at a source repository and run it.
 
-A full model is generated based on your markdown or html files, and then this model is passed to the Razor engine for templating. Here is a snipped from a sample Razor template:
+A full model is generated based on your markdown or html files, and then this model is passed to the Razor engine for templating. Here are some snippets from a sample Razor template:
 
     CREATE AN INDEX OF ALL POSTS
 	<ul>
@@ -37,8 +42,11 @@ A full model is generated based on your markdown or html files, and then this mo
     }
     </ul>
 
+Note that the @Html extensions or any ASP.NET dependencies are not available for use in the .cshtml. But you can use good old C# in there.  In the future, it could be
+possible to exend the Garoozi's default page model.
 
-Your source directory should be have the following structure:
+To set up your site, your source directory should be have the following structure:
+
      Layout
      _layouts/   <- your .cshtml Razor templates will be here.
      _posts/     <- your blog posts will be here.  if you name your file 2011-4-20-My-First-Post.md it will get transformed into the file /2011/4/20/My-First-Post.html  
@@ -47,7 +55,7 @@ Your source directory should be have the following structure:
 
      You can then have any other html or markdown files. These will be treated as pages (not blog posts). For example:
      index.html 
-     error.html
+     error.md
      about.html
 
 
@@ -58,8 +66,17 @@ In each of your files, you will want to add a special configuration Front Matter
 	  layout: "post"     /* name of Razor template to use.  For instance, this would use a template _layouts/post.cshtml */
 	}
         
-        HERE Is where I would start typing the content of my Page!
+    HERE Is where I would start typing the content of my Page!
 
+	
+Once you have your folder structured properly, you are ready to go.  You will need to set up a config.js file (see the sample app.js file).  Then you can set up Build.fsx, Publish.fsx, and Dev.fsx files.  
+See the www.guerrera.org repository for examples.  You can then right click on these files to run via F# Interactive, or you can go to the command line and type:
+	> fsi dev.fsx  // to start a server at http://localhost:8088  
+                   // you can then browse to this as you write your content in markdown or update your
+				   // Razor templates
+	> fsi build.fsx   // to build
+	> fsi publish.fsix  // to publish to s3
+	
 
 Some Notes:
 -----------
@@ -70,14 +87,7 @@ Some Notes:
 * this static output is written to a staging folder, and is optionally compressed
 * an rss feed is generated from the files in the /_posts directory
 * all assets in your source folder are copied to the output directory
-* all files in the output directory are pushed to S3 (and soon Windows Azure)
-
-
-
-Items to Do:
-------------
-* Push to Azure
-* project is organized in Modules.  I'd like to make it more .NET friendly
+* all files in the output directory are pushed to S3 (and soon Windows Azure) (the diff is copied)
 
 
 Hosting a website at S3
