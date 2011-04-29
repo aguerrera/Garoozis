@@ -27,14 +27,13 @@ let delete_all_items_from_s3 (service:S3Service) (bucketName:string) =
 
 // gets manifest
 let get_manifest output_dir = 
-    let manifest_file = Path.Combine(output_dir, "garoozis.manifest.txt")
-    if File.Exists( manifest_file) = false then
-        File.WriteAllText(manifest_file, "")
-    let lines = File.ReadAllLines(manifest_file)
     let dict = new System.Collections.Generic.Dictionary<string,string>()
-    for line in lines do
-        let arr = line.Split(',')
-        dict.[arr.[0]] <- arr.[1]
+    let manifest_file = Path.Combine(output_dir, "garoozis.manifest.txt")
+    if File.Exists( manifest_file) = true then
+        let lines = File.ReadAllLines(manifest_file)
+        for line in lines do
+            let arr = line.Split(',')
+            dict.[arr.[0]] <- arr.[1]
     dict
 
 // write the current file/hash manifest

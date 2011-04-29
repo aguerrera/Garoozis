@@ -13,6 +13,7 @@ let errorTemplate = @"<html><head><title>problems...</title></head>
 <body style='color:#fff;background-color:blue;font-family:consolas,system,lucida console,terminal;font-size:16px;'>
 <div style='color:red;font-weight:bold;font-size:24px'>Error!!!!</div>
 <div style='border:1px solid #c0c0c0;padding:10px;margin:10px;'>
+<p style='font-weight:bold;'>$message</p>
 $content
 </div>
 
@@ -31,8 +32,8 @@ let system_default_doc_name = "index.html"
 let get_url_list www_dir = 
     let files = Utils.get_files(www_dir)
     let urlify (f:string) = 
-        if f.IndexOf("_post/") <> -1 then
-            Transformer.get_url_from_filename(f).Replace(www_dir, "").Replace("\\", "/").Substring(1)
+        if f.IndexOf("_posts") <> -1 then
+            Transformer.get_url_from_filename(f).Replace(www_dir, "").Replace("\\", "/").Substring(1).Replace("_posts/", "")
         else 
             f.Replace(www_dir, "").Replace("\\", "/").Replace(".md",".html").Substring(1)
 
@@ -83,6 +84,11 @@ let render_or_contents (path:string) (www_path:string) =
         System.Text.Encoding.UTF8.GetBytes(r)
 
 
+let get_error_bytes message content urls = 
+    let error = errorTemplate.Replace("$message", message).Replace("$content", content).Replace("$urls", get_html_list(urls))
+    System.Text.Encoding.UTF8.GetBytes(error)
+
+
 // main httplistener loop
 // this is the actual server
 let run_httplistener (port:int) (www_dir:string) (renderer:string->string->byte[]) = 
@@ -107,16 +113,21 @@ let run_httplistener (port:int) (www_dir:string) (renderer:string->string->byte[
         if path = "" then
             path <- default_document
         let query = ctx.Request.Url.Query.Replace("?", "")
-        printfn " request:  %s " path
+        if path <> "favicon.ico" then
+            printfn " request:  %s " path
         use sw = new BinaryWriter(ctx.Response.OutputStream)
         try
-            let bytes = renderer path www_dir
-            sw.Write(bytes)
+            if path <> "favicon.ico" then
+                let bytes = renderer path www_dir
+                sw.Write(bytes)
         with 
+        | :? System.IO.FileNotFoundException as ex ->
+                                    printfn "error %s" ex.Message 
+                                    let errorBytes = get_error_bytes "System.IO.FileNotFound" ex.Message urls
+                                    sw.Write(errorBytes)
         | :? System.Exception as ex ->
                                     printfn "error %s" ex.Message 
-                                    let error = errorTemplate.Replace("$content", ex.ToString()).Replace("$urls", get_html_list(urls))
-                                    let errorBytes = System.Text.Encoding.UTF8.GetBytes(error)
+                                    let errorBytes = get_error_bytes "System.Exception" ex.Message urls
                                     sw.Write(errorBytes)
         sw.Flush()
         ctx.Response.Close()

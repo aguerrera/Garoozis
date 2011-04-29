@@ -38,7 +38,7 @@ module Garoozis.Utils
     // recursively delete all files and directories
     let delete_files_and_directories path = 
         let files = get_files path |> Seq.toList
-        files |> List.iter (fun f -> File.Delete(f))
+        files |> List.filter (fun f -> f.IndexOf("garoozis.manifest.txt") = -1)  |> List.iter (fun f -> File.Delete(f))
         let dirs = get_dirs path |> Seq.sort |> Seq.toList |> List.rev
         dirs |> List.iter (fun d -> Directory.Delete(d))
         ()

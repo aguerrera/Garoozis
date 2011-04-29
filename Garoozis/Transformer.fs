@@ -145,6 +145,8 @@ let create_rss (posts:IEnumerable<Page>) (url:string) (title:string) (desc:strin
     feed.Channel.Title <- title
     feed.Channel.Description <- desc
     feed.Channel.Copyright <- author
+    feed.Channel.TimeToLive <- 60
+    feed.Channel.LastBuildDate <- DateTime.Now.ToUniversalTime()
     for p in posts do
         let itemurl = new Uri(url + "/" + p.Url)
         let item = new Argotic.Syndication.RssItem()
