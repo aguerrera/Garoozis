@@ -31,6 +31,11 @@ let render_page renderf (model:Model) (map:Map<string,string>) =
     let html = renderf model map
     html
 
+// valid page name (no pages that begin with . or ~)
+let is_valid_page_name (n:string) = 
+    let valid = n.StartsWith(".") && n.IndexOf("~") = -1
+    valid
+
 // get the new file name, by looking at the format.  
 // if it starts with yyyy-mm or yyyy-mm-dd, then those get changed 
 // into a folder structure.
@@ -212,8 +217,6 @@ let RenderPageForUrl (url:string) (source_dir:string) =
     let rendered = render_page renderer model layout_map
     rendered
 
-
-
 // main Build method.  this does the following:
 // 1. deletes files from output dir
 // 2. copies non-transformable files to output
@@ -247,7 +250,7 @@ let Build (config:Config) =
     let layout_map = get_layout_map source_dir
 
     // get all files in the top level directory, or in the special _posts directory
-    let posts = Directory.GetFiles(source_dir + @"\_posts") |> Array.filter ( fun p -> p.StartsWith(".") = false) 
+    let posts = Directory.GetFiles(source_dir + @"\_posts") |> Array.filter ( fun p -> is_valid_page_name(p) ) 
     let pages = Directory.GetFiles(source_dir + @"\") |> Array.filter ( fun p -> p.StartsWith(".") = false)
 
     let files_to_transorm = pages |> Array.append <| posts 

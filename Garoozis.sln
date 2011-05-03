@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Garoozis", "Garoozis\Garoozis.fsproj", "{D2A2E987-7EB3-4522-8F10-F4F5878684FC}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Garoozis", "src\Garoozis.fsproj", "{D2A2E987-7EB3-4522-8F10-F4F5878684FC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_layouts", "_layouts", "{14BCA5D3-DAAC-4D1D-BA47-A39EE9BEC5AC}"
 	ProjectSection(SolutionItems) = preProject

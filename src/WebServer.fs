@@ -30,7 +30,7 @@ $urls
 let system_default_doc_name = "index.html"
 
 let get_url_list www_dir = 
-    let files = Utils.get_files(www_dir)
+    let files = Utils.get_files(www_dir) |> Seq.filter (fun f -> Transformer.is_valid_page_name(f) )
     let urlify (f:string) = 
         if f.IndexOf("_posts") <> -1 then
             Transformer.get_url_from_filename(f).Replace(www_dir, "").Replace("\\", "/").Substring(1).Replace("_posts/", "")
