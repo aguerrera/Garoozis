@@ -49,6 +49,7 @@ module Garoozis.Utils
         if Directory.Exists(newdest) = false then Directory.CreateDirectory(newdest) |> ignore
         printfn "copying dir: %s TO %s" source newdest
         Directory.GetFiles(source) 
+        |> Seq.filter (fun f -> f.EndsWith("~") = false)
         |> Seq.iter (fun f -> 
                         printfn "   File %s" f
                         File.Copy(f, Path.Combine(newdest, Path.GetFileName(f)), true ) 

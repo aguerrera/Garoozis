@@ -17,6 +17,23 @@ open System.Text.RegularExpressions
 let configSource = __SOURCE_DIRECTORY__  + @"\test.js"
 let config = Garoozis.Utils.get_config(configSource)
 
+let get_date1 () = 
+    DateTime.Now
+
+let get_date2 () = 
+    DateTime.Now.AddMinutes(2.0)
+
+let is_now f = 
+    let d = f()
+    printfn "%A" d
+    DateTime.Now = f()
+
+is_now get_date1
+
+let fs = Garoozis.Utils.get_files config.SourceDir
+
+fs |> Seq.toList
+
 
 Garoozis.Transformer.Build(config)
 Garoozis.RemoteStorage.PublishToS3(config)

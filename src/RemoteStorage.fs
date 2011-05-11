@@ -67,7 +67,7 @@ let PublishToS3 (config:Config)=
             old_hash <> new_hash
 
     let files = Garoozis.Utils.get_files(config.OutputDir) 
-                |> Seq.filter (fun f -> Path.GetFileName(f).ToLower() <> "garoozis.manifest.txt")
+                |> Seq.filter (fun f -> Path.GetFileName(f).ToLower() <> "garoozis.manifest.txt" && f.EndsWith("~") = false)
                 |> Seq.toList
 
     printfn "S3: uploading to bucket %s" bucketName

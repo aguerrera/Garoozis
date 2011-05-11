@@ -13,9 +13,4 @@ db.sqlite
 *.pidb
 *.userprefs
 test.js
- .deps
- .libs
- *~
-+*#
-+.#*
- *.stamp
+*~
