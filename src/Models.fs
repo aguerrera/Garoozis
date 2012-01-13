@@ -49,6 +49,7 @@ type Page() =
     let mutable m_filename = ""
     let mutable m_layout = ""
     let mutable m_created = DateTime.MinValue
+    let mutable m_pubdate = ""
     let mutable m_url = ""
     member x.Title with get () = m_title
                         and set title = m_title <- title
@@ -62,6 +63,8 @@ type Page() =
                         and set url = m_url <- url
     member x.Created with get () = m_created
                         and set created = m_created <- created
+    member x.PubDate with get () = m_pubdate
+                        and set pubdate = m_pubdate <- pubdate
 
 // the Model will represent the currently processed page as well as a list of all pages.
 type Model() = 

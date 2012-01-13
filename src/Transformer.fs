@@ -79,6 +79,8 @@ let get_page filename =
         if page.Created = DateTime.MinValue then 
             let fi = new FileInfo(filename)
             page.Created <- fi.CreationTime
+        if String.IsNullOrWhiteSpace(page.PubDate) = false then
+            page.Created <- DateTime.Parse(page.PubDate)
         match Path.GetExtension(filename) with
         | ".md" -> page.Content <- Garoozis.Utils.md_to_html(contents)
         | _ -> page.Content <- contents

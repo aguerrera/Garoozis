@@ -1,6 +1,6 @@
 {
-    OutputDir : "c:\\staging\\www",
-    SourceDir : "c:\\source\\garoozis\\sample",
+    OutputDir : "\\staging\\www",
+    SourceDir : ".\\www",
     StorageContainer : "<your bucket name>",        
     StorageKey : "<some key>",          
     StoragePass : "<some pass>",    

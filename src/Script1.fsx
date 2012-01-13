@@ -34,7 +34,6 @@ let fs = Garoozis.Utils.get_files config.SourceDir
 
 fs |> Seq.toList
 
-
 Garoozis.Transformer.Build(config)
 Garoozis.RemoteStorage.PublishToS3(config)
 //Garoozis.WebServer.Start 8085 config.SourceDir false

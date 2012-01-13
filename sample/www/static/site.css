@@ -1,8 +1,17 @@
-body { font-family:Georgia,Serif;}
-a {color:orange}
-.page { width:500px; margin-left:auto; margin-right:auto;}
-.header { background-color:orange;color:#fff;padding:5px;}
-.content { font-size:14px; padding: 10px;}
-.pager { border:1px sold #ff0000;padding:4px;font-size:12px;} 
-.footer { background-color:orange;color:#fff;font-size:18px;padding:5px;}
-.footer a { color:#fff;}
+body 
+{
+    font-size: 110%;
+    font-family: 'Quattrocento Sans', arial, serif;
+    color: #232323;
+    background-color: #E2F0F0;
+}
+
+h1 a { color:#101010;text-decoration:none; }
+h2 a { color:#404040;  }
+
+.post { margin-top:10px;margin-bottom:10px }
+.post h2 { margin:0px; }
+.post .date { font-style:italic; }
+.header { border-bottom: 2px solid #8B87FF;}
+.subheader {font-style:italic; border-bottom: 2px solid #8B87FF;margin-bottom:10px;}
+.footer { border-top: 2px solid #8B87FF;margin-top:15px;margin-bottom:20px;}

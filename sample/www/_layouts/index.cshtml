@@ -1,30 +1,56 @@
 ﻿<html>
 <head>
-    <link rel="stylesheet" type="text/css" href="/static/site.css" />
+    <link rel="stylesheet" type="text/css" href="/static/blueprint/screen.css"> 
+	<!--[if lt IE 8]>
+		<link href="/static/blueprint/ie.css")" rel="stylesheet" type="text/css" />
+	<![endif]-->
+    <link href='http://fonts.googleapis.com/css?family=Quattrocento+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/static/site.css"> 
     <link rel="alternate" type="application/rss+xml" title="garoozis.guerrera.org Feed" href="http://garoozis.guerrera.org/rss.xml" />
     <title>@Model.Title</title>
 </head>
+
+
 <body>
-    <div class="page">
+    <div class="container">
         <div class="header">
-            <h1>garoozis.guerrera.org</h1>
+            <span class="span-21"><h1><a href="http://garoozis.guerrera.org/">garoozis.guerrera.org</a></h1></span>
+            <span class="span-2"><a href="/static/images/dude.jpg"><img height="70" src="/static/images/dude.jpg" /></a></span>
+			<div class="clear"></div>
         </div>
-        <div class="content">
+		<div class="subheader">garoozis template.  pardon my design skills.</div>
+        <div class="content clear">
+            <div>
             @Model.Content
-        </div>
-        <div>
-            <div>All Posts</div>
-            <ul>
-            @foreach (var post in Model.Posts.OrderByDescending(x => x.Created) )
-            {
-                <li><a href="/@post.Url">@post.Title</a></li>   
+            </div>
+            @{
+                var posts = Model.Posts.OrderByDescending(x => x.Created).Take(5);
             }
-            </ul>
+            @foreach (var post in posts) 
+            {
+            <div class="post">
+                <h2><a href="/@post.Url">@post.Title</a></h2>
+                <div class="date">@post.Created.ToString("d MMM yyyy H:mm") EST</div>
+                <div class="postcontent">@post.Content</div>
+            </div>
+            }
+
+            <p>
+                <a href="/archive.html">Older posts</a>
+            </p>
         </div>
+
         <div class="footer">
-            <a href="https://github.com/aguerrera/Garoozis">Garoozis</a>: Razor Templates -> Static Files
+            All content &copy Andy Guerrera
+            |
+            <a href="http://twitter.com/aguerrera">Twitter</a>
+            |
+            <a href="/archive.html">Archive</a>
+            |
+            <a href="http://garoozis.guerrera.org/rss.xml">RSS</a>
+            |
+            Static HTML built with <a href="https://github.com/aguerrera/Garoozis">Garoozis</a>: Razor Templates -> Static Files
         </div>
-        <i>Published @DateTime.Now.ToString("d MMM yyyy H:mm")</i>
     </div>
-</body>
-</html>
+</body></html>
+

@@ -1,13 +1,22 @@
 ﻿<html>
 <head>
-    <link rel="stylesheet" type="text/css" href="/static/site.css" />
+    <link rel="stylesheet" type="text/css" href="/static/blueprint/screen.css"> 
+	<!--[if lt IE 8]>
+		<link href="/static/blueprint/ie.css")" rel="stylesheet" type="text/css" />
+	<![endif]-->
+    <link href='http://fonts.googleapis.com/css?family=Quattrocento+Sans' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="/static/site.css"> 
     <link rel="alternate" type="application/rss+xml" title="garoozis.guerrera.org Feed" href="http://garoozis.guerrera.org/rss.xml" />
     <title>@Model.Title</title>
 </head>
+
+>
 <body>
-    <div class="page">
+    <div class="container">
         <div class="header">
-            <h1>garoozis.guerrera.org</h1>
+            <span class="span-21"><h1><a href="http://garoozis.guerrera.org/">garoozis.guerrera.org</a></h1></span>
+            <span class="span-2"><a href="/static/images/dude.jpg"><img height="70" src="/static/images/dude.jpg" /></a></span>
+			<div class="clear"></div>
         </div>
         <div class="content">
             @Model.Content
@@ -23,7 +32,15 @@
             }
         </div>
         <div class="footer">
-            <a href="https://github.com/aguerrera/Garoozis">Garoozis</a>: Razor Templates -> Static Files
+            All content &copy Andy Guerrera
+            |
+            <a href="http://twitter.com/aguerrera">Twitter</a>
+            |
+            <a href="/archive.html">Archive</a>
+            |
+            <a href="http://garoozis.guerrera.org/rss.xml">RSS</a>
+            |
+            Static HTML built with <a href="https://github.com/aguerrera/Garoozis">Garoozis</a>: Razor Templates -> Static Files
         </div>
     </div>
 </body>
