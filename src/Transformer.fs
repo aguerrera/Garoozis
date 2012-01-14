@@ -197,8 +197,8 @@ let optimize_output (output_dir:string) =
 let RenderPageForUrl (url:string) (source_dir:string) = 
 
     let layout_map = get_layout_map source_dir
-    let posts = Directory.GetFiles(source_dir + @"\_posts") |> Array.filter ( fun p -> p.StartsWith(".") = false) 
-    let pages = Directory.GetFiles(source_dir + @"\") |> Array.filter ( fun p -> p.StartsWith(".") = false)
+    let posts = Directory.GetFiles(source_dir + @"\_posts") |> Array.filter ( fun p -> Path.GetFileName(p).StartsWith(".") = false) 
+    let pages = Directory.GetFiles(source_dir + @"\") |> Array.filter ( fun p -> Path.GetFileName(p).StartsWith(".") = false)
 
     let files_to_transorm = pages |> Array.append <| posts 
     let pageModels = 
@@ -252,8 +252,12 @@ let Build (config:Config) =
     let layout_map = get_layout_map source_dir
 
     // get all files in the top level directory, or in the special _posts directory
-    let posts = Directory.GetFiles(source_dir + @"\_posts") |> Array.filter ( fun p -> is_valid_page_name(p) = true ) 
-    let pages = Directory.GetFiles(source_dir + @"\") |> Array.filter ( fun p -> p.StartsWith(".") = false && p.EndsWith("~") = false)
+    let posts = Directory.GetFiles(source_dir + @"\_posts") |> Array.filter ( fun p -> 
+                                                                                       let pn = System.IO.Path.GetFileName(p)
+                                                                                       is_valid_page_name(pn) = true ) 
+    let pages = Directory.GetFiles(source_dir + @"\") |> Array.filter ( fun p -> 
+                                                                                let pn = System.IO.Path.GetFileName(p)
+                                                                                pn.StartsWith(".") = false && pn.EndsWith("~") = false)
 
     let files_to_transorm = pages |> Array.append <| posts 
 

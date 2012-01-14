@@ -1,6 +1,6 @@
 {
-  title: "Page Threef",
+  title: "Page Three",
   layout: "post"
 }
 
-This si the third post
+This is the third post
