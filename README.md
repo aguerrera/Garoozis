@@ -92,7 +92,7 @@ Then you can set up Build.fsx, Publish.fsx, and Dev.fsx files.  See the sample f
 	> fsi dev.fsx           // to start a server at http://localhost:8088  
                                 // you can then browse to this as you write your content in markdown or update your
                                 // Razor templates
-                                // Note that you need administratrive privileges for this.  So launch the command line with "Run as Administrator"
+                                // Note that you need **administratrive privileges** for this.  So launch the command line with "Run as Administrator"
 
 	> fsi dev.fsx --static  // this will start the server at http://localhost:8088 for your static html site that garoozis spits out.  
                                 // This is helpful for viewing the end product.
@@ -112,7 +112,7 @@ Some Notes:
 * an rss feed is generated from the files in the /_posts directory
 * all assets in your source folder are copied to the output directory
 * all files in the output directory are pushed to S3 (and soon Windows Azure) (the diff is copied)
-
+* you need ADMINSTRATOR privileges to run the web server. so open up VS as an admistrator or open your command line as an administrator.  Not sure why this is, exactly.
 
 Hosting a website at S3
 -----------------------
