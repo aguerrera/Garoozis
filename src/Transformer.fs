@@ -3,6 +3,7 @@
 open System
 open System.Collections.Generic
 open System.IO
+open System.Linq
 open System.Security.Cryptography
 open System.Text
 open System.Text.RegularExpressions
@@ -154,7 +155,8 @@ let create_rss (posts:IEnumerable<Page>) (url:string) (title:string) (desc:strin
     feed.Channel.Copyright <- author
     feed.Channel.TimeToLive <- 60
     feed.Channel.LastBuildDate <- DateTime.Now.ToUniversalTime()
-    for p in posts do
+    let sortedposts = posts |> Seq.toList |> List.sortWith (fun px py -> DateTime.Compare(py.Created, px.Created) )
+    for p in sortedposts do
         let itemurl = new Uri(url + "/" + p.Url)
         let item = new Argotic.Syndication.RssItem()
         item.Guid <- new Argotic.Syndication.RssGuid(itemurl.ToString(),true)
