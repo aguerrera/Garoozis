@@ -51,6 +51,7 @@ type Page() =
     let mutable m_created = DateTime.MinValue
     let mutable m_pubdate = ""
     let mutable m_url = ""
+    let mutable m_ignore = false
     member x.Title with get () = m_title
                         and set title = m_title <- title
     member x.Content with get () = m_content
@@ -65,6 +66,8 @@ type Page() =
                         and set created = m_created <- created
     member x.PubDate with get () = m_pubdate
                         and set pubdate = m_pubdate <- pubdate
+    member x.Ignore with get () = m_ignore
+                        and set ignore = m_ignore <- ignore
 
 // the Model will represent the currently processed page as well as a list of all pages.
 type Model() = 

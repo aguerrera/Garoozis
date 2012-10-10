@@ -206,7 +206,7 @@ let RenderPageForUrl (url:string) (source_dir:string) =
     let pageModels = 
         files_to_transorm 
         |> Seq.map (fun f -> get_page(f)) 
-        |> Seq.filter (fun p -> p.FileName <> "")
+        |> Seq.filter (fun p -> p.FileName <> "" && p.Ignore = false)
         |> Seq.toList
 
     // the actual renderer to be used.  you can use a fake_renderer to bypass
