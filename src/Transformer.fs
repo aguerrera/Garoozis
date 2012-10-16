@@ -230,6 +230,9 @@ let Build (config:Config) =
     let output_dir = config.OutputDir
     let source_dir = config.SourceDir
 
+    let stopwatch = new System.Diagnostics.Stopwatch();
+    stopwatch.Start();
+
     // setup output folder
     if Directory.Exists(output_dir) = false then
         Directory.CreateDirectory(output_dir) |> ignore
@@ -287,6 +290,8 @@ let Build (config:Config) =
                         write_output_file p.Url rendered output_dir                
                     )
 
+
+
     printfn "processed %i pages" <| Seq.length pages
 
     // compress js and css using YUI
@@ -300,7 +305,12 @@ let Build (config:Config) =
         let posts = pageModels |> Seq.filter (fun p -> is_post(p) = true   ) 
         create_rss posts config.Url config.BlogTitle config.BlogDesc config.BlogAuthor config.OutputDir
 
+
+    stopwatch.Stop
+    let elapsed = stopwatch.Elapsed.ToString();
+    printfn "ellapsed %s" elapsed
     printfn "done!"
+
 
     ()
 
