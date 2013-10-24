@@ -306,7 +306,7 @@ let Build (config:Config) =
         create_rss posts config.Url config.BlogTitle config.BlogDesc config.BlogAuthor config.OutputDir
 
 
-    stopwatch.Stop
+    stopwatch.Stop()
     let elapsed = stopwatch.Elapsed.ToString();
     printfn "ellapsed %s" elapsed
     printfn "done!"
